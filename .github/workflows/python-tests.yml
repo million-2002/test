@@ -1,23 +1,31 @@
-# 1) Create feature branch from latest dev
-git checkout dev
-git pull origin dev
-git switch -c feature/add-addition-functionality
-# 2) Add sample additional functionality to your app, plus an additional test
-# The add files from this code change
-git add .
-git commit -m "feat: additional functionality and tests; CI workflows"
-git push -u origin feature/add-addition-functionality
-# 3) Open puul request: from your feature branch to dev
-# 4) Observe CI
-# 5) Merge pull request into dev after all checks pass
-# 6) Promote dev -> staging via PR
-git checkout staging
-git pull origin staging
-git merge --no-ff dev -m "chore: promote to staging"
-git push origin staging
-# 7) Promote staging -> main via PR after verification
-git checkout main
-git pull origin main
-git merge --no-ff staging -m "chore: release to main"
-git push origin main
-# CI: python-tests + docker-build
+name: Python Tests
+# 触发条件：feature/* 分支推送 + 向 dev/staging/main 提 PR
+on:
+  push:
+    branches: [ 'feature/**' ]
+  pull_request:
+    branches: [ dev, staging, main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # 步骤1：拉取代码
+      - uses: actions/checkout@v4
+      
+      # 步骤2：设置 Python 3.12（匹配 Dockerfile 版本）
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: 'pip'  # 缓存依赖，加速构建
+      
+      # 步骤3：安装依赖（文档指定 pytest==8.3.3）
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      # 步骤4：运行测试（指定 tests/ 目录下的测试文件）
+      - name: Run tests
+        run: pytest tests/test_app.py -v
