@@ -1,0 +1,23 @@
+# 1) Create feature branch from latest dev
+git checkout dev
+git pull origin dev
+git switch -c feature/add-addition-functionality
+# 2) Add sample additional functionality to your app, plus an additional test
+# The add files from this code change
+git add .
+git commit -m "feat: additional functionality and tests; CI workflows"
+git push -u origin feature/add-addition-functionality
+# 3) Open puul request: from your feature branch to dev
+# 4) Observe CI
+# 5) Merge pull request into dev after all checks pass
+# 6) Promote dev -> staging via PR
+git checkout staging
+git pull origin staging
+git merge --no-ff dev -m "chore: promote to staging"
+git push origin staging
+# 7) Promote staging -> main via PR after verification
+git checkout main
+git pull origin main
+git merge --no-ff staging -m "chore: release to main"
+git push origin main
+# CI: python-tests + docker-build
