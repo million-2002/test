@@ -1,0 +1,6 @@
+artifact_location: file:///home/million/docker-volume-demo/test/mlruns/681847071600359722
+creation_time: 1761490151439
+experiment_id: '681847071600359722'
+last_update_time: 1761490151439
+lifecycle_stage: active
+name: MLFlow-Demo-Experiment

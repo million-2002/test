@@ -1,0 +1,15 @@
+.git/
+.gitignore
+.gitmodules
+
+data/
+*.dvc
+
+mlruns/
+
+app/test_app.py
+tests/
+
+*.log
+*.pdf
+__pycache__/
