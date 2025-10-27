@@ -40,10 +40,6 @@ jobs:
           # 2. 检查代码规范，不终止但输出统计
           flake8 app/ tests/ --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
 
-       #自动格式化代码
-      - name: Auto-format code with black
-        run: black app/ tests/
-
       # 步骤4：运行测试（指定 tests/ 目录下的测试文件）
       - name: Run tests
         run: pytest tests/test_app.py -v
