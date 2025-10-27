@@ -5,7 +5,7 @@ on:
   push:
     branches: [ 'feature/**' ]
   pull_request:
-    branches: [ dev, staging, main ]
+    branches: [ dev, staging, master ]
 
 jobs:
   test:
@@ -26,7 +26,19 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      
+
+       # 新增：代码linting
+      - name: Lint code with flake8
+        run: |
+          # 1. 检查严重错误，发现即终止 CI
+          flake8 app/ tests/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          # 2. 检查代码规范，不终止但输出统计
+          flake8 app/ tests/ --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
+
+       #自动格式化代码
+      - name: Auto-format code with black
+        run: black app/ tests/
+
       # 步骤4：运行测试（指定 tests/ 目录下的测试文件）
       - name: Run tests
         run: pytest tests/test_app.py -v
